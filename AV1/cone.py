@@ -4,38 +4,34 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from math import *
 
-def circle():
-    glPushMatrix()
-    glTranslatef(1,0,0)
-    glBegin(GL_POINTS)
-    raio = 0.5
+ 
+def cone():
+    glRotatef(0.03,1,0,0)
+    glBegin(GL_LINES)
+    raio = 1
     n = 50
-    for i in range(0,n):
-        theta = i*(2*pi)/(n)
-        for j in range(0,n):
-            phi = (j*2*pi)/n
-            x = raio * cos(theta)
-            y = raio * sin(theta)
-            z = 0
-            glVertex3f(x,y,z)
+    for i in range(0,n+1):
+        theta = (i*360)/(n)
+        x = raio * sin(theta)
+        z = raio * cos(theta) 
+        glVertex3f(0,2,0)
+        glVertex3f(x,0,z)
     glEnd()
-    glPopMatrix()
     
-def doughnut():
-    glRotatef(10,1,0,0)
-    glPushMatrix()
-    n = 10
-    for i in range(0,n):
-        glPushMatrix()
-        theta = i*(360)/(n)
-        glRotatef(theta,0,1,0)
-        circle()
-        glPopMatrix()  
-    glPopMatrix()  
-    
+    #desenha a base
+    glBegin(GL_LINES)
+    for i in range(0,n+1):
+        theta = (i*360)/(n)
+        x = raio * sin(theta)
+        z = raio * cos(theta) 
+        glVertex3f(0,0,0)
+        glVertex3f(x,0,z)
+    glEnd()
+         
 def desenha():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    doughnut()
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+    cone()
+
 
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
@@ -47,7 +43,7 @@ sdl2.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_PROFILE_MASK,sdl2.SDL_GL_CONTEXT_PR
 sdl2.SDL_GL_SetAttribute(sdl2.SDL_GL_DOUBLEBUFFER, 1)
 sdl2.SDL_GL_SetAttribute(sdl2.SDL_GL_DEPTH_SIZE, 24)
 sdl2.SDL_GL_SetSwapInterval(1)
-window = sdl2.SDL_CreateWindow(b"Cubo", sdl2.SDL_WINDOWPOS_CENTERED, sdl2.SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, sdl2.SDL_WINDOW_OPENGL | sdl2.SDL_WINDOW_SHOWN)
+window = sdl2.SDL_CreateWindow(b"Cone", sdl2.SDL_WINDOWPOS_CENTERED, sdl2.SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, sdl2.SDL_WINDOW_OPENGL | sdl2.SDL_WINDOW_SHOWN)
 if not window:
     sys.stderr.write("Error: Could not create window\n")
     exit(1)
@@ -57,7 +53,7 @@ glEnable(GL_DEPTH_TEST)
 glClearColor(0.,0.,0.,1.)
 print(glGetString(GL_VERSION))
 gluPerspective(45,800.0/600.0,0.1,100.0)
-glTranslatef(0.0,0.0,-5)
+glTranslatef(0.0,0.0,-10)
 
 running = True
 event = sdl2.SDL_Event()
@@ -75,4 +71,3 @@ while running:
             print("SDL_MOUSEBUTTONDOWN")
     desenha()
     sdl2.SDL_GL_SwapWindow(window)
-    sdl2.SDL_Delay(50)
