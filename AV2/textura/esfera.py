@@ -7,10 +7,10 @@ from math import *
 
 def esfera():
     glRotatef(1, 1, 0, 0)
-    glBegin(GL_POINTS)
+    glBegin(GL_TRIANGLE_STRIP)
     raio = 1
     n = 50
-    for i in range(0, n+2):
+    for i in range(0, n):
         theta = ((i*pi)/(n)) - pi/2
         for j in range(0, n):
             phi = (j*2*pi)/n
@@ -18,6 +18,12 @@ def esfera():
             y = raio * sin(theta)
             z = raio * cos(theta) * sin(phi)
             glVertex3f(x, y, z)
+            phi1 = ((j+1)*2*pi)/n
+            x0 = raio * cos(theta) * cos(phi1)
+            y0 = raio * sin(theta)
+            z0 = raio * cos(theta)* sin(phi1)
+            glVertex3f(x0, y0, z0)
+            theta = (((i+1)*pi)/(n)) - pi/2
     glEnd()
 
 

@@ -6,36 +6,48 @@ import sys
 
 global a
 a = 0
+n = 10
+phi0 = 0
+phin = 360
+theta0 = -pi/2
+thetan = pi/2
 
+cores = ((1, 0, 0), (1, 1, 0), (0, 1, 0), (0, 1, 1), (0, 0, 1), (1, 0, 1),
+            (0.5, 1, 1), (1, 0, 0.5))
+dphi = (phin-phi0)/n
+dtheta = (thetan-theta0)/n
 
 def esfera():
     glRotatef(1, 1, 0, 0)
-    glBegin(GL_TRIANGLE_STRIP)
     raio = 1
-    n = 20
-    phi0 = 0
-    cores = ((1, 0, 0), (1, 1, 0), (0, 1, 0), (0, 1, 1), (0, 0, 1), (1, 0, 1),
-             (0.5, 1, 1), (1, 0, 0.5))
-    dt = (1 * 2 * pi) / n
+    phi = phi0
     for i in range(0, n):
+        glBegin(GL_TRIANGLE_STRIP)
+        theta = theta0
+        glColor3fv(cores[i%8])
+        for j in range(0, n+1):
+            x = raio * cos(theta) * cos(phi)
+            y = raio * sin(theta)
+            z = raio * cos(theta) * sin(phi)
+        
+            x0 = raio * cos(theta) * cos(phi+dphi)
+            y0 = raio * sin(theta)
+            z0 = raio * cos(theta)* sin(phi+dphi)
+            glVertex3f(x, y, z)
+            glVertex3f(x0,y0,z0)
+            theta += dtheta
+        glEnd()
+        phi += dphi
         # # theta = ((i * pi) / (n)) - pi / 2
+        # # glColor3fv(cores[i % 8])
         # # for j in range(0, n):
-        # #     phi = (j * 2 * pi) / n
-        # #     x = raio * cos(theta) * cos(phi)
-        # #     y = raio * sin(theta)
-        # #     z = raio * cos(theta) * sin(phi)
-        # #     glVertex3f(x, y, z)
-        theta = ((i * pi) / (n)) - pi / 2
-        glColor3fv(cores[i % 8])
-        for j in range(0, n):
-            phi = (j * 2 * pi) / n  # phi0
-            pontos = calculePonto(theta, phi)
-            print(pontos)
-            pontos2 = calculePonto(theta, phi + dt)
-            glVertex3f(pontos["x"], pontos["y"], pontos["z"])
-            glVertex3f(pontos2["x"], pontos2["y"], pontos2["z"])
-            print(pontos2)
-    glEnd()
+        # #     phi = (j * 2 * pi) / n  # phi0
+        # #     pontos = calculePonto(theta, phi)
+        # #     print(pontos)
+        # #     pontos2 = calculePonto(theta, phi + dt)
+        # #     glVertex3f(pontos["x"], pontos["y"], pontos["z"])
+        # #     glVertex3f(pontos2["x"], pontos2["y"], pontos2["z"])
+        # #     print(pontos2)
 
 
 def calculePonto(theta, phi):

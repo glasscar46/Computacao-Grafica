@@ -5,38 +5,29 @@ from math import *
 import sys
 
 vertices = (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1),
-)
+    (0,1,0),
+    ( 1,-1,-1),
+    (-1,-1,-1),
+    ( 1,-1, 1),
+    (-1,-1, 1),
+    )
 
 linhas = (
-    (0, 1),
-    (0, 3),
-    (0, 4),
-    (2, 1),
-    (2, 3),
-    (2, 7),
-    (6, 3),
-    (6, 4),
-    (6, 7),
-    (5, 1),
-    (5, 4),
-    (5, 7),
+    (0,1),
+    (0,2),
+    (0,3),
+    (0,4),
+    (1,2),
+    (3,4),
+    (1,3),
+    (2,4)
 )
-
 faces = (
-        (0, 1, 2, 3),
-        (3, 2, 7, 6),
-        (6, 7, 5, 4),
-        (4, 5, 1, 0),
-        (1, 5, 7, 2),
-        (4, 0, 3, 6)
+    (1,2,4,3),
+    (0,1,2),
+    (0,3,4),
+    (0,1,3),
+    (0,2,4),
 )
 
 # https://www.opengl.org/wiki/Calculating_a_Surface_Normal
@@ -72,11 +63,26 @@ def Cubo():
             glVertex3fv(vertices[vertex])
     glEnd()
 
+def piramide():
+    #drawing the base
+    glBegin(GL_QUADS)
+    glNormal3fv(calculaNormalFace(faces[0]))
+    for vertex in faces[0]:
+       glVertex3fv(vertices[vertex]) 
+    glEnd()
+    #drawing the sides
+    glBegin(GL_TRIANGLES)
+    for i in range(1,5):
+        glNormal3fv(calculaNormalFace(faces[i]))
+        for vertex in faces[i]:
+            glVertex3fv(vertices[vertex])
+    glEnd()
+
 
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glRotatef(2, 1, 3, 0)
-    Cubo()
+    piramide()
     glutSwapBuffers()
 
 
@@ -98,13 +104,12 @@ def reshape(w, h):
 
 
 def init():
-    mat_ambient = (0.4, 0.0, 0.0, 1.0)
-    mat_diffuse = (1.0, 0.0, 0.0, 1.0)
-    mat_specular = (1.0, 0.5, 0.5, 1.0)
-    mat_shininess = (50,)
-    light_position = (10, 0, 0)
+    mat_ambient = (0.24725, 0.1995, 0.0745, 1.0)
+    mat_diffuse = (0.75164, 0.60648, 0.22648, 1.0)
+    mat_specular = (0.628281, 0.555802, 0.366065, 1.0)
+    mat_shininess = (60,)
+    light_position = (10, 5, 3)
     glClearColor(0.0, 0.0, 0.0, 0.0)
-#    glShadeModel(GL_FLAT)
     glShadeModel(GL_SMOOTH)
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient)
@@ -123,7 +128,7 @@ def main():
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA |
                         GLUT_DEPTH | GLUT_MULTISAMPLE)
     glutInitWindowSize(800, 600)
-    glutCreateWindow("Cubo")
+    glutCreateWindow("Piramide")
     glutReshapeFunc(reshape)
     glutDisplayFunc(display)
     glutTimerFunc(50, timer, 1)
