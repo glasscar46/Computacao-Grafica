@@ -20,18 +20,18 @@ linhas = (
     (2,3),
     
     (2,4),
+    (1,5),
     (3,5),
     
     (4,1),
     (4,5),
-    (1,5),
 )
 faces = (
-    (0,2,3),
-    (1,4,5),
-    (2,3,5,4),
+    (0,3,5,1), # frente
+    (1,5,4), #
     (0,1,4,2),
-    (0,1,5,3)
+    (0,2,3),
+    (3,2,4,5) # baixo
 )
 faces2 =  (
     (0,2,3),
@@ -70,8 +70,9 @@ def calculaNormalFace(face):
 
 def prisma():
     i = 1
+    
     glBegin(GL_TRIANGLES)
-    for j in [0,1]:
+    for j in [1,3]:
         face = faces[j]
         glNormal3fv(calculaNormalFace(face))
         for vertex in face:
@@ -79,7 +80,7 @@ def prisma():
     glEnd()
     #drawing the base
     glBegin(GL_QUADS)
-    for j in [2,3,4]:
+    for j in [0,2,4]:
         face = faces[j]
         glNormal3fv(calculaNormalFace(face))
         for vertex in face:
@@ -87,9 +88,9 @@ def prisma():
     glEnd()
 
 def prisma2():
-    glBegin(GL_TRIANGLE_STRIP)
+    glBegin(GL_TRIANGLE_FAN)
     for j in range(len(faces2)):
-        face = faces[j]
+        face = faces2[j]
         glNormal3fv(calculaNormalFace(face))
         for vertex in face:
             glVertex3fv(vertices[vertex])
@@ -124,8 +125,8 @@ def init():
     mat_ambient = (0.24725, 0.1995, 0.0745, 1.0)
     mat_diffuse = (0.75164, 0.60648, 0.22648, 1.0)
     mat_specular = (0.628281, 0.555802, 0.366065, 1.0)
-    mat_shininess = (60,)
-    light_position = (10, 5, 3)
+    mat_shininess = (50,)
+    light_position = (-10, 0, -5)
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glShadeModel(GL_SMOOTH)
 
@@ -145,12 +146,10 @@ def main():
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA |
                         GLUT_DEPTH | GLUT_MULTISAMPLE)
     glutInitWindowSize(800, 600)
-    glutCreateWindow("Piramide")
+    glutCreateWindow("Prisma")
     glutReshapeFunc(reshape)
     glutDisplayFunc(display)
     glutTimerFunc(50, timer, 1)
     init()
     glutMainLoop()
-
-
 main()

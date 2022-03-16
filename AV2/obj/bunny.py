@@ -8,16 +8,8 @@ x = 100
 def display():
     global obj, x
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    glRotatef(2,1,3,0)
-
-    glPushMatrix()
+    glRotatef(2,0,1,0)
     obj.draw()
-    glPopMatrix()
-
-    glPushMatrix()
-    glTranslate(x,10,-80)
-    obj.draw()
-    glPopMatrix()
     glutSwapBuffers()
 
     x = x-0.5
@@ -32,7 +24,7 @@ def reshape(w,h):
     gluPerspective(45,float(w)/float(h),0.1,200.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    gluLookAt(0,1,40,0,0,0,0,1,0)
+    gluLookAt(0,1,10,0,0,0,0,1,0)
 
 def init():
     global obj
@@ -47,13 +39,13 @@ def init():
     glShadeModel(GL_SMOOTH)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_MULTISAMPLE)
-    obj = OBJ("cessna.obj")
+    obj = OBJ("bunny.obj")
 
 def main():
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE)
     glutInitWindowSize(800,600)
-    glutCreateWindow("Obj")
+    glutCreateWindow("Stanford Bunny")
     glutReshapeFunc(reshape)
     glutDisplayFunc(display)
     glutTimerFunc(50,timer,1)

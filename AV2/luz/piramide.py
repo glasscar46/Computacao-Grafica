@@ -23,11 +23,11 @@ linhas = (
     (2,4)
 )
 faces = (
-    (1,2,4,3),
+    (0,4,3),
+    (0,3,1),
     (0,1,2),
-    (0,3,4),
-    (0,1,3),
     (0,2,4),
+    (4,2,1,3),
 )
 
 # https://www.opengl.org/wiki/Calculating_a_Surface_Normal
@@ -54,28 +54,20 @@ def calculaNormalFace(face):
     NLength = sqrt(N[x]*N[x]+N[y]*N[y]+N[z]*N[z])
     return (N[x]/NLength, N[y]/NLength, N[z]/NLength)
 
-
-def Cubo():
-    glBegin(GL_QUADS)
-    for face in faces:
-        glNormal3fv(calculaNormalFace(face))
-        for vertex in face:
-            glVertex3fv(vertices[vertex])
-    glEnd()
-
 def piramide():
-    #drawing the base
-    glBegin(GL_QUADS)
-    glNormal3fv(calculaNormalFace(faces[0]))
-    for vertex in faces[0]:
-       glVertex3fv(vertices[vertex]) 
-    glEnd()
+   
     #drawing the sides
     glBegin(GL_TRIANGLES)
-    for i in range(1,5):
+    for i in range(0,4):
         glNormal3fv(calculaNormalFace(faces[i]))
         for vertex in faces[i]:
             glVertex3fv(vertices[vertex])
+    glEnd()
+     #drawing the base
+    glBegin(GL_QUADS)
+    glNormal3fv(calculaNormalFace(faces[4]))
+    for vertex in faces[4]:
+       glVertex3fv(vertices[vertex]) 
     glEnd()
 
 
@@ -108,7 +100,7 @@ def init():
     mat_diffuse = (0.75164, 0.60648, 0.22648, 1.0)
     mat_specular = (0.628281, 0.555802, 0.366065, 1.0)
     mat_shininess = (60,)
-    light_position = (10, 5, 3)
+    light_position = (-10, 5, 3)
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glShadeModel(GL_SMOOTH)
 
